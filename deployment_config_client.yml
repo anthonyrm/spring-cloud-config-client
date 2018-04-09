@@ -1,0 +1,32 @@
+apiVersion: apps/v1beta1
+kind: Deployment
+metadata:
+    name: spring-cloud-client
+spec:
+    selector:
+        matchLabels:
+            app: spring-cloud-client
+    replicas: 1
+    template:
+        metadata:
+            labels:
+                app: spring-cloud-client
+        spec:
+            containers:
+                - name: spring-cloud-client
+                  image: configserverpocregistry.azurecr.io/spring-cloud-client:v7
+                  ports:
+                    - containerPort: 8080
+                  imagePullPolicy: Always
+---
+apiVersion: v1
+kind: Service
+metadata:
+    name: spring-cloud-client
+spec:
+    type: LoadBalancer
+    ports:
+      - port: 8080
+        targetPort: 8080
+    selector:
+      app: spring-cloud-client
